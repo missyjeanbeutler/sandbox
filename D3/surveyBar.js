@@ -1,5 +1,3 @@
-import surveyData from './surveyData.js';
-
 angular.module('app')
   .directive('barChart', function () {
     return {
@@ -9,6 +7,7 @@ angular.module('app')
       //   projectName: '='
       // },
       controller: function ($scope) {
+        console.log(surveyData)
 
         // let d = $scope.projectData;
 
