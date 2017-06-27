@@ -6,25 +6,51 @@ angular.module('app')
       //   projectData: '=',
       //   projectName: '='
       // },
-      controller: function ($scope) {
-        console.log(surveyData)
+      controller: function ($scope, surveyData) {
+        let survey = 'OSAT'
+        let sd = surveyData.data
+        let filteredData = sd.filter(e => e.cohort === 'DM23');
 
-        // let d = $scope.projectData;
+        let averages = (dataArr) => {
+          let arr = []
+          let obj = {}
+          let max = 0;
+          let min = 13;
+          for(let i = 0; i < dataArr.length; i++) {
+            let u = dataArr[i].unit
+            if(u > max) max = u 
+            if(u < min) min = u
+            let d = dataArr[i]
+            if(!obj[u]) obj[u] = {}
+            obj[u].CSAT = obj[u].CSAT ? obj[u].CSAT + d.CSAT : d.CSAT 
+            obj[u].FSAT = obj[u].FSAT ? obj[u].FSAT + d.FSAT : d.FSAT
+            obj[u].MSAT = obj[u].MSAT ? obj[u].MSAT + d.MSAT : d.MSAT
+            obj[u].OSAT = obj[u].OSAT ? obj[u].OSAT + d.OSAT : d.OSAT
+            obj[u].CSATcount = obj[u].CSATcount ? obj[u].CSATcount += 1 : 1
+            obj[u].FSATcount = obj[u].FSATcount ? obj[u].FSATcount += 1 : 1
+            obj[u].MSATcount = obj[u].MSATcount ? obj[u].MSATcount += 1 : 1
+            obj[u].OSATcount = obj[u].OSATcount ? obj[u].OSATcount += 1 : 1
+            console.log('count: ', obj[u].CSATcount, ', unit: ', u)
+          }
+          for(let i = min; i <= max; i++) {
+            console.log(i, ' for loop')
+            obj[i].CSAT = (obj[i].CSAT/obj[i].CSATcount).toFixed(2)
+            obj[i].FSAT = (obj[i].FSAT/obj[i].FSATcount).toFixed(2)
+            obj[i].MSAT = (obj[i].MSAT/obj[i].MSATcount).toFixed(2)
+            obj[i].OSAT = (obj[i].OSAT/obj[i].OSATcount).toFixed(2)
+            obj[i].unit = i
+            delete obj[i].CSATcount
+            delete obj[i].FSATcount
+            delete obj[i].MSATcount
+            delete obj[i].OSATcount
+            arr.push(obj[i])
+          }
+          return arr
+        }
 
-        // let project = $scope.projectName;
+        let data = averages(filteredData)
+        console.log(data)
 
-        // let data = []
-        // var num;
-
-        // for (let i = 0; i < d.length; i++) {
-        //   data.push([d[i].initials, d[i][project]])
-        // }
-
-        // data.sort((a, b) => {
-        //   return a[1] - b[1]
-        // })
-
-        let data = surveyData.filter(e => e.cohort = 'DM21');
 
         var margin = {
           top: 40,
@@ -32,22 +58,20 @@ angular.module('app')
           bottom: 40,
           left: 50
         }
+
+        let num = 9;
         // var height = document.getElementById('projectScoresDiv').offsetHeight - 100 - margin.top - margin.bottom;
         // var width = document.getElementById('projectScoresDiv').offsetWidth - margin.right - margin.left;
         var height = 400;
         var width = 600;
 
         var x = d3.scaleBand()
-          .domain(data.map(function (d) {
-            return d[0];
-          }))
+          .domain([1, 13])
           .range([0, width])
-          .padding(.1);
+          .padding(.5)
 
         var y = d3.scaleLinear()
-          .domain([0, d3.max(data, function (d) {
-            return d[1];
-          })])
+          .domain([0, 10])
           .range([height, 0]);
 
         var xAxis = d3.axisBottom(x);
@@ -58,7 +82,7 @@ angular.module('app')
           .attr('class', 'd3-tip')
           .offset([-10, 0])
           .html(function (d) {
-            return "<strong>Student:</strong> <span style='color:#21AAE1'> " + d[0] + "</span>";
+            return "<strong>Rating:</strong> <span style='color:#21AAE1'> " + d[survey] + "</span>";
           })
           .style('font-size', '11px')
 
@@ -77,32 +101,38 @@ angular.module('app')
           .call(yAxis)
           .append("text")
           .attr("transform", "rotate(-90)")
-          .attr("y", 6)
-          .attr("dy", ".71em")
           .style("text-anchor", "end")
-          .text("Student");
+
+        svg.append('g')
+          .attr('class', 'x axis')
+          .call(xAxis)
+          .append("text")
+          .attr("transform", "translate(0," + height + ")")
+          // .attr("transform", "translate(" + height + ", 0)")
+          
 
         svg.selectAll(".bar")
           .data(data)
           .enter().append("rect")
           .attr("class", "bar")
           .attr("x", function (d) {
-            return x(d[0]);
+            return x(d.unit);
           })
           .attr("width", x.bandwidth())
+          
           .attr("y", function (d) {
-            return y(d[1]);
+            return y(d[survey]);
           })
           .attr("height", function (d) {
-            return height - y(d[1]);
+            return height - y(d[survey]);
           })
           .attr('fill', function (d) {
-            if (d[1] >= num) return '#21AAE1'
+            if (d[survey] >= num) return '#21AAE1'
             else return '#141414';
           })
           .on('mouseover', function (d) {
             tip.show(d)
-            if (d[1] >= num) {
+            if (d[survey] >= num) {
               d3.select(this)
                 .attr("fill", "#297FAA");
             } else {
@@ -112,7 +142,7 @@ angular.module('app')
           })
           .on('mouseout', function (d) {
             tip.hide(d)
-            if (d[1] >= num) {
+            if (d[survey] >= num) {
               d3.select(this)
                 .attr("fill", '#21AAE1');
             } else {
@@ -121,103 +151,97 @@ angular.module('app')
             }
           })
 
-        function type(d) {
-          d[1] = +d[1];
-          return d;
-        }
+        // let updateBarChart = (newData, num) => {
 
+        //   var yD = d3.scaleLinear().domain([0, d3.max(newData, function (d) {
+        //     return d[survey];
+        //   })]).range([height - 20, 0]);
 
-        let updateBarChart = (newData, num) => {
+        //   var yAxis = d3.axisLeft(yD)
 
-          var yD = d3.scaleLinear().domain([0, d3.max(newData, function (d) {
-            return d[1];
-          })]).range([height - 20, 0]);
-
-          var yAxis = d3.axisLeft(yD)
-
-          var ya = d3.select('#barChart')
-                    .selectAll('.y.axis')
+        //   var ya = d3.select('#barChart')
+        //             .selectAll('.y.axis')
 
 
 
-        var bars = d3.select('#barChart')
-          .selectAll(".bar")
-          .data(newData)
-          .attr("y", height)
-          .attr("height", 0)
-          .on('mouseover', function (d) {
-              tip.show(d)
-              if (d[1] >= num) {
-                d3.select(this)
-                  .attr("fill", "#297FAA");
-              } else {
-                d3.select(this)
-                  .attr("fill", "#000");
-              }
-            })
-            .on('mouseout', function (d) {
-              tip.hide(d)
-              if (d[1] >= num) {
-                d3.select(this)
-                  .attr("fill", '#21AAE1');
-              } else {
-                d3.select(this)
-                  .attr("fill", "#141414");
-              }
-            })
+        // var bars = d3.select('#barChart')
+        //   .selectAll(".bar")
+        //   .data(newData)
+        //   .attr("y", height)
+        //   .attr("height", 0)
+        //   .on('mouseover', function (d) {
+        //       tip.show(d)
+        //       if (d[survey] >= num) {
+        //         d3.select(this)
+        //           .attr("fill", "#297FAA");
+        //       } else {
+        //         d3.select(this)
+        //           .attr("fill", "#000");
+        //       }
+        //     })
+        //     .on('mouseout', function (d) {
+        //       tip.hide(d)
+        //       if (d[survey] >= num) {
+        //         d3.select(this)
+        //           .attr("fill", '#21AAE1');
+        //       } else {
+        //         d3.select(this)
+        //           .attr("fill", "#141414");
+        //       }
+        //     })
 
 
-          bars.transition()
-              .duration(1000)
-              .attr("width", x.bandwidth())
-          .attr("y", function (d) {
-            return yD(d[1]);
-          })
-          .attr("height", function (d) {
-            return height - yD(d[1]);
-          })
-          .attr('fill', function (d) {
-            if (d[1] >= num) return '#21AAE1'
-            else return '#141414';
-          })
+        //   bars.transition()
+        //       .duration(1000)
+        //       .attr("width", x.bandwidth())
+        //   .attr("y", function (d) {
+        //     return yD(d[survey]);
+        //   })
+        //   .attr("height", function (d) {
+        //     return height - yD(d[survey]);
+        //   })
+        //   .attr('fill', function (d) {
+        //     if (d[survey] >= num) return '#21AAE1'
+        //     else return '#141414';
+        //   })
           
-          ya.transition().duration(1000).call(yAxis)
-        }
+        //   ya.transition().duration(1000).call(yAxis)
+        // }
 
 
 
 
-        $scope.$watch('projectName', function (newValue, oldValue) {
-          let d = $scope.projectData
+        // $scope.$watch('projectName', function (newValue, oldValue) {
+        //   let d = $scope.projectData
 
-          let project = $scope.projectName;
+        //   let project = $scope.projectName;
 
-          let data = []
-          let num
+        //   let data = []
+        //   let num
 
-          if (project === 'personalScore') {
-            data = data.concat(personalScore)
-            num = 70
-          }
-          if (project === 'groupScore') {
-            data = data.concat(groupScore)
-            num = 100
-          }
-          if (project === 'noServerScore') {
-            data = data.concat(noServerScore)
-            num = 7
-          }
+        //   if (project === 'personalScore') {
+        //     data = data.concat(personalScore)
+        //     num = 70
+        //   }
+        //   if (project === 'groupScore') {
+        //     data = data.concat(groupScore)
+        //     num = 100
+        //   }
+        //   if (project === 'noServerScore') {
+        //     data = data.concat(noServerScore)
+        //     num = 7
+        //   }
 
-          for (let i = 0; i < d.length; i++) {
-            data.push([d[i].initials, d[i][project]])
-          }
+        //   for (let i = 0; i < d.length; i++) {
+        //     data.push([d[i].initials, d[i][project]])
+        //   }
 
-          data.sort((a, b) => {
-            return a[1] - b[1]
-          })
+        //   data.sort((a, b) => {
+        //     return a[1] - b[1]
+        //   })
 
-          updateBarChart(data, num)
-        })
+        //   updateBarChart(data, num)
+        // })
 
 
 
