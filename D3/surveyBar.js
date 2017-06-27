@@ -7,9 +7,9 @@ angular.module('app')
       //   projectName: '='
       // },
       controller: function ($scope, surveyData) {
-        let survey = 'OSAT'
+        let survey = 'MSAT'
         let sd = surveyData.data
-        let filteredData = sd.filter(e => e.cohort === 'DM23');
+        let filteredData = sd.filter(e => e.cohort === 'DM24');
 
         let averages = (dataArr) => {
           let arr = []
@@ -30,19 +30,13 @@ angular.module('app')
             obj[u].FSATcount = obj[u].FSATcount ? obj[u].FSATcount += 1 : 1
             obj[u].MSATcount = obj[u].MSATcount ? obj[u].MSATcount += 1 : 1
             obj[u].OSATcount = obj[u].OSATcount ? obj[u].OSATcount += 1 : 1
-            console.log('count: ', obj[u].CSATcount, ', unit: ', u)
           }
           for(let i = min; i <= max; i++) {
-            console.log(i, ' for loop')
             obj[i].CSAT = (obj[i].CSAT/obj[i].CSATcount).toFixed(2)
             obj[i].FSAT = (obj[i].FSAT/obj[i].FSATcount).toFixed(2)
             obj[i].MSAT = (obj[i].MSAT/obj[i].MSATcount).toFixed(2)
             obj[i].OSAT = (obj[i].OSAT/obj[i].OSATcount).toFixed(2)
             obj[i].unit = i
-            delete obj[i].CSATcount
-            delete obj[i].FSATcount
-            delete obj[i].MSATcount
-            delete obj[i].OSATcount
             arr.push(obj[i])
           }
           return arr
@@ -53,7 +47,7 @@ angular.module('app')
 
 
         var margin = {
-          top: 40,
+          top: 100,
           right: 30,
           bottom: 40,
           left: 50
@@ -66,9 +60,9 @@ angular.module('app')
         var width = 600;
 
         var x = d3.scaleBand()
-          .domain([1, 13])
+          .domain([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13])
           .range([0, width])
-          .padding(.5)
+          .padding(.2)
 
         var y = d3.scaleLinear()
           .domain([0, 10])
@@ -80,9 +74,11 @@ angular.module('app')
 
         var tip = d3.tip()
           .attr('class', 'd3-tip')
-          .offset([-10, 0])
+          .offset([-15, 0])
           .html(function (d) {
-            return "<strong>Rating:</strong> <span style='color:#21AAE1'> " + d[survey] + "</span>";
+            let count = survey + 'count'
+            return "Responded: <span style='color:#21AAE1; line-height: 1.5;'> " + d[count] + "</span>" +
+            "<br>" + "Average Rating: <span style='color:#21AAE1; line-height: 1.5;'> " + d[survey] + "</span>"
           })
           .style('font-size', '11px')
 
@@ -105,10 +101,9 @@ angular.module('app')
 
         svg.append('g')
           .attr('class', 'x axis')
+          .attr("transform", "translate(0," + height + ")")
           .call(xAxis)
           .append("text")
-          .attr("transform", "translate(0," + height + ")")
-          // .attr("transform", "translate(" + height + ", 0)")
           
 
         svg.selectAll(".bar")
