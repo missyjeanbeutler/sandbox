@@ -6,14 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
+    <h2>All variables are referenced from the service</h2>
     <div ng-controller='ctrl'>
-      {{ctrlCount}}
-      <button ng-click='click()'>click me</button>
+      <h4>from the first controller ---></h4> {{ctrlCount}}
+      <br>
+      <h4>This button changes the value of these variables in the service</h4> <button ng-click='click()'>click me</button>
     </div>
     <div ng-controller='ctrl2'>
-      {{count.num}}
+      <h4>from the second controller ---> </h4>{{count.num}}
       <br>
-      {{count.num2}}
+      <h4>from the second controller which originated from the first controller ---></h4> {{count.num2}}
     </div>
     <dir></dir>
   
