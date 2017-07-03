@@ -2,7 +2,7 @@ angular.module('app')
     .directive('bar', function () {
         return {
             restrict: 'AE',
-            templateUrl: 'barChart.html',
+            template: '<div id="bar"></div>',
             controller: function () {
 
                 let data = [
@@ -122,7 +122,7 @@ angular.module('app')
                         return "<strong>Student:</strong> <span style='color:#21AAE1'> " + d[0] + "</span>";
                     })
 
-                var svg = d3.select("body").append("svg")
+                var svg = d3.select("#bar").append("svg")
                     .attr("width", width + margin.left + margin.right)
                     .attr("height", height + margin.top + margin.bottom)
                     .append("g")
