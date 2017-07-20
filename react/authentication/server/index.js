@@ -55,11 +55,16 @@ app.get('/auth/me', function(req, res) {
 
 app.get('/auth/logout', function(req, res) {
   req.logout();
-  res.redirect('/');
+  res.redirect('http://localhost:3006/');
 })
 
-app.get('/testing', function(req, res) {
+app.get('/getting', function(req, res) {
   res.send('it worked!')
+})
+
+app.post('/posting', function(req, res) {
+  req.user.submitted = req.body.data
+  res.send(req.user.submitted)
 })
 
 app.listen(3000, function() {
