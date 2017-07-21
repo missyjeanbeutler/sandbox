@@ -12,7 +12,7 @@ app.use(bodyParser.json())
 
 io.on('connection', function (socket) {
   socket.on('from:react', function (data) {
-    io.emit('from:server', data)
+    socket.emit('from:server', data)
   });
 });
 
