@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import io from 'socket.io-client';
-let socket = io.connect(`http://localhost:3000/`)
+let socket = io(`http://localhost:3000/`)
 
 class App extends Component {
   constructor() {

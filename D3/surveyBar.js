@@ -1,3 +1,6 @@
+
+// Cohort average for each week looking at individual categories.
+
 angular.module('app')
   .directive('barChart', function () {
     return {
@@ -5,7 +8,7 @@ angular.module('app')
       scope: {},
       controller: function ($scope, surveyData) {
         $scope.survey = 'MSAT'
-        $scope.cohort = 'DM22'
+        $scope.cohort = 'WPR23'
         let survey = $scope.survey
         let sd = surveyData.data
         let filteredData = sd.filter(e => e.cohort === $scope.cohort);
@@ -117,7 +120,7 @@ angular.module('app')
           })
           .attr('fill', function (d) {
             if (d[survey] >= num) return '#21AAE1'
-            else return '#141414';
+            else return '#252525';
           })
           .on('mouseover', function (d) {
             tip.show(d)
@@ -136,7 +139,7 @@ angular.module('app')
                 .attr("fill", '#21AAE1');
             } else {
               d3.select(this)
-                .attr("fill", "#141414");
+                .attr("fill", "#252525");
             }
           })
           .transition()
@@ -150,7 +153,7 @@ angular.module('app')
           })
           .attr('fill', function (d) {
             if (d[survey] >= num) return '#21AAE1'
-            else return '#141414';
+            else return '#252525';
           })
 
         $scope.changeBar = () => {
@@ -202,7 +205,7 @@ angular.module('app')
                   .attr("fill", '#21AAE1');
               } else {
                 d3.select(this)
-                  .attr("fill", "#141414");
+                  .attr("fill", "#252525");
               }
             })
             .transition()
@@ -216,7 +219,7 @@ angular.module('app')
             })
             .attr('fill', function (d) {
               if (d[newSurvey] >= num) return '#21AAE1'
-              else return '#141414';
+              else return '#252525';
             })
         }
 

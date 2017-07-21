@@ -1,7 +1,6 @@
 const express = require('express'),
       app = express(),
-      http = require('http'),
-      server = http.createServer(app),
+      server = require('http').createServer(app),
       io = require('socket.io')(server),
       cors = require('cors'),
       bodyParser = require('body-parser')
