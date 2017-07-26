@@ -1,0 +1,39 @@
+.box {
+  background-color: red;
+  margin: 10px;
+  height: 40px;
+  width: 40px;
+}
+
+.newBox {
+  background-color: blue;
+}
+
+.profileCard {
+  width: 150px;
+  height: 100px;
+  background-color: #EEE;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+  cursor: pointer;
+}
+
+.boxes {
+  background-color: red;
+  margin: 10px;
+  height: 40px;
+  width: 40px;
+}
+
+input {
+  width: 250px;
+  height: 25px;
+  padding-left: 10px;
+}
+
+input:focus {
+  outline: none;
+}
