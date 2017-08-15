@@ -1,7 +1,6 @@
 const express = require('express'),
       session = require('express-session'),
       bodyParser = require('body-parser'),
-      config = require('./config.js'),
       controller = require('./controller.js')
 
 function setExpressApp() {
@@ -15,7 +14,7 @@ const app = setExpressApp(),
 
 app.use(bodyParser.json())
 app.use(session({
-  secret: config.SESSION_SECRET,
+  secret: ';lasdfkjlsdf',
   resave: true,
   saveUninitialized: true
 }))
@@ -24,8 +23,8 @@ app.use(session({
 //-----------END POINTS-----------//
 
 
-app.get('/api/one', controller.getOne)
-app.get('/api/all', controller.getAll)
+app.get('/getOne', controller.getOne)
+app.get('/getAll', controller.getAll)
 
 
 
