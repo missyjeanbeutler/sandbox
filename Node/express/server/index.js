@@ -3,27 +3,25 @@ const express = require('express'),
       bodyParser = require('body-parser'),
       controller = require('./controller.js')
 
-function setExpressApp() {
-  console.log('setting express app')
-  return express()
-}
-const app = setExpressApp(),
+const app = express(),
       port = 3000
 
 //-----------MIDDLEWARE-----------//
 
-app.use(bodyParser.json())
 app.use(session({
-  secret: ';lasdfkjlsdf',
-  resave: true,
-  saveUninitialized: true
+  secret: 'thisislakwjbvlksdf',
+  saveUninitialized: false,
+  resave: false
 }))
 
 
 //-----------END POINTS-----------//
 
 
-app.get('/getOne', controller.getOne)
+app.get('/getOne', (req, res) => {
+    console.log(req) 
+    res.send('you got all!')
+  })
 app.get('/getAll', controller.getAll)
 
 
