@@ -1,0 +1,46 @@
+
+<svg version="1.1" id="logo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 500 500" style="enable-background:new 0 0 500 500;" xml:space="preserve">
+
+
+
+<defs>
+<!-- Here we can put javascript -->
+	<style type="text/css">
+		.st0{fill:#FFF;stroke:#000000;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+
+		.st0 {
+			stroke-dasharray: 1200;
+			stroke-dashoffset: 0;
+			animation: dash 1.5s linear forwards;
+		}
+
+		#logo:hover .st0 {
+			fill: #EEE;
+			transition: .8s;
+		}
+
+		@keyframes dash {
+			from {
+				stroke-dashoffset: 1200;
+			}
+			to {
+				stroke-dashoffset: 0;
+			}
+		}
+	</style>
+</defs>
+
+
+
+<!-- <g> group for different layers -->
+<g>
+	<path d="M250,34c29.2,0,57.4,5.7,84.1,17c25.7,10.9,48.8,26.5,68.7,46.3c19.8,19.8,35.4,42.9,46.3,68.7c11.3,26.6,17,54.9,17,84.1
+		s-5.7,57.4-17,84.1c-10.9,25.7-26.5,48.8-46.3,68.7c-19.8,19.8-42.9,35.4-68.7,46.3c-26.6,11.3-54.9,17-84.1,17s-57.4-5.7-84.1-17
+		c-25.7-10.9-48.8-26.5-68.7-46.3c-19.8-19.8-35.4-42.9-46.3-68.7c-11.3-26.6-17-54.9-17-84.1s5.7-57.4,17-84.1
+		c10.9-25.7,26.5-48.8,46.3-68.7s42.9-35.4,68.7-46.3C192.6,39.7,220.8,34,250,34 M250,30C128.5,30,30,128.5,30,250
+		s98.5,220,220,220s220-98.5,220-220S371.5,30,250,30L250,30z"/>
+</g>
+<polygon class="st0" points="153,350 153,146 347.1,350 347.1,146 "/>
+<line class="st0" x1="153" y1="350" x2="347.1" y2="350"/>
+</svg>

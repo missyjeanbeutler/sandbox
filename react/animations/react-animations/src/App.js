@@ -8,6 +8,10 @@ const styles = StyleSheet.create({
     animationName: merge(rubberBand, bounce),
     animationDuration: '2s',
     animationIterationCount: 'infinite'
+  },
+  fade: {
+    animationName: fadeIn,
+    animationDuration: '3s'
   }
 })
 
@@ -17,26 +21,27 @@ export default class App extends Component {
     super()
     this.state = {
       items: ['this', 'is', 'a', 'bouncy', 'sentence'],
-      toBounce: false
+      toBounce: false,
+      styles: [styles.fade]
     }
   }
 
-  bounceButton = () => {
-    this.setState({toBounce: !this.state.toBounce})
+  toggleBounce = () => {
+    this.setState({styles: styles.bounce})
   }
 
   render() {
 
-    const s = this.state.toBounce ? css(styles.bounce) : null
+    const s = this.state.toBounce ? css(styles.bounce, styles.fade) : css(styles.fade)
 
     const items = this.state.items.map((e, i) => (
-      <h2 className={s} key={i}>{e}</h2>
+      <h2 className={css(this.state.styles)} key={i}>{e}</h2>
     ))
 
     return (
       <div>
         {items}
-        <button onClick={this.bounceButton}>toggle the bounce!</button>
+        <button onClick={this.toggleBounce}>toggle the bounce!</button>
       </div>
     )
   }
