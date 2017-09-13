@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
-import { merge, fadeIn, fadeOut, rubberBand, bounce } from 'react-animations';
+import { merge, fadeIn, rubberBand, bounce } from 'react-animations';
 import { StyleSheet, css } from 'aphrodite';
+import List from './List.js';
 
 const styles = StyleSheet.create({
   bounce: {
@@ -20,28 +21,30 @@ export default class App extends Component {
   constructor() {
     super()
     this.state = {
-      items: ['this', 'is', 'a', 'bouncy', 'sentence'],
       toBounce: false,
-      styles: [styles.fade]
+      styles: []
     }
   }
 
   toggleBounce = () => {
-    this.setState({styles: styles.bounce})
+    this.state.toBounce ? 
+    this.setState({styles: [], toBounce: false}) :
+    this.setState({styles: [styles.bounce], toBounce: true})
+  }
+
+  componentDidMount() {
+    this.setState({
+      styles: [styles.fade]
+    })
   }
 
   render() {
 
-    const s = this.state.toBounce ? css(styles.bounce, styles.fade) : css(styles.fade)
-
-    const items = this.state.items.map((e, i) => (
-      <h2 className={css(this.state.styles)} key={i}>{e}</h2>
-    ))
-
     return (
       <div>
-        {items}
+        <h2 className={css(this.state.styles)}>This is a bouncy sentence!</h2>
         <button onClick={this.toggleBounce}>toggle the bounce!</button>
+        <List />
       </div>
     )
   }
