@@ -5,7 +5,7 @@ import { StyleSheet, css } from 'aphrodite';
 const styles = StyleSheet.create({
   in: {
     animationName: fadeIn,
-    animationDuration: '1s'
+    animationDuration: '2s'
   },
   out: {
     animationName: fadeOut,
