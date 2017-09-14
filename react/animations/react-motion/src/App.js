@@ -18,14 +18,14 @@ class App extends Component {
     }
   }
 
-  getStyles = () => {
+  getStyles = () => { // beware of memory references when changing the style object. A safe way to avoid this is by adding the style object separately for both the styles prop and the defaultStyles prop
     return this.state.todo.map(e => {
-      return {...e, style:{height: spring(60, presets.gentle), opacity: spring(1, presets.gentle)}}
+      return {...e, style:{height: spring(50, presets.gentle), opacity: spring(1, presets.gentle)}}
     })
   }
 
   getDefaults = () => {
-    return this.state.todo.map(e=> ({...e, style:{height: 0, opacity: 0}}))
+    return this.state.todo.map(e => ({...e, style:{height: 0, opacity: 0}}))
   }
 
   submit = (e) => {
@@ -41,20 +41,17 @@ class App extends Component {
         opacity: 1
       }
     }
-
     this.setState({
       todo: [newItem, ...this.state.todo]
     })
-    
     this.input.value = ''
   }
 
   delete = (key) => {
-    const newTodos = this.state.todo.filter(e => {
-      return e.key !== key
-    })
     this.setState({
-      todo: newTodos
+      todo: this.state.todo.filter(e => {
+        return e.key !== key
+      })
     })
   }
 
@@ -71,14 +68,14 @@ class App extends Component {
     this.setState({open: !this.state.open})
   }
 
-  willEnter() {
+  willEnter() { // used with the willEnter prop, should return an object with style properties. This is like the defaultStyle props, the initial style before transitioning. 
     return {
       height: 0,
       opacity: 1
     }
   }
   
-  willLeave() {
+  willLeave() { // used with the willLeave prop. It's the styles that the component will be transitioned to before unmounting.
     return {
       height: spring(0),
       opacity: spring(0)
@@ -88,12 +85,17 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Motion defaultStyle={{x: 0}} style={{x: this.state.open ? spring(200) : spring(100)}}>
+        <Motion style={{x: this.state.open ? spring(450) : spring(300)}}>
           {style => {
           return (
-            <form onSubmit={this.submit} style={{width: `${style.x}px`}}>
-              <input ref={(input) => this.input = input} onFocus={this.toggleInput} onBlur={this.toggleInput}
-              style={{width: `${style.x}px`}}/>
+            <form className='form' onSubmit={this.submit} >
+              <input 
+                className='addInput'
+                ref={(input) => this.input = input} 
+                onFocus={this.toggleInput} 
+                onBlur={this.toggleInput}
+                style={{width: `${style.x}px`}}
+                placeholder='Add a new todo item...'/>
             </form>
           )}}
         </Motion>
@@ -104,15 +106,14 @@ class App extends Component {
           willEnter={this.willEnter}>
           {styles => {
             return (
-            <ul>
-              {
-                styles.map(({key, data: {item, checked}, style}, i) => (
+            <ul className='todo-container'>
+              {styles.map(({key, data: {item, checked}, style}, i) => (
                 <div key={key} style={{background: '#DDD', listStyleType: 'none', ...style}}>
+                  <input className='toggle' type='checkbox' onChange={() => this.toggleCheckbox(i)}/>
                   <li className={checked ? 'todo-list completed' : 'todo-list'}>
                     {item}
-                    <button onClick={() => this.delete(key)}>delete</button>
-                    <input type='checkbox' onChange={() => this.toggleCheckbox(i)}/>
                   </li>
+                  <button className='delete' onClick={() => this.delete(key)}>X</button>
                 </div>
               ))}
             </ul>
