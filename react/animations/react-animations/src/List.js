@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 import { fadeIn, fadeOut } from 'react-animations';
 import { StyleSheet, css } from 'aphrodite';
 
+const heightChange = {
+  height: "50px",
+  transition: "height 1s"
+}
+
 const styles = StyleSheet.create({
   in: {
     animationName: fadeIn,
@@ -31,7 +36,9 @@ export default class List extends Component {
   }
 
   deleteItem = (i) => {
-    document.getElementById(i).className = css(styles.out)
+    const item = document.getElementById(i)
+    item.style.height = "0px";
+    item.className = css(styles.out)
     const items = [...this.state.items]
     setTimeout(() => { // so far this is the only solution I can find to have a transition that works before it's removed from this list WITHOUT using react-transition-group. I feel like it's a terrible solution.
       items.splice(i, 1)
@@ -50,7 +57,7 @@ export default class List extends Component {
   render() {
 
     const items = this.state.items.map((e, i) => (
-      <div className={css(this.state.styles)} key={i} id={i}>
+      <div className={css(this.state.styles)} style={heightChange} key={`${i}${e}`} id={i}>
         <p>{e}</p>
         <button onClick={() => this.deleteItem(i)}>delete this item</button>
       </div>

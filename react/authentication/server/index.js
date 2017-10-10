@@ -3,10 +3,11 @@ const express = require('express'),
       bodyParser = require('body-parser'),
       passport = require('passport'),
       Auth0Strategy = require('passport-auth0'),
-      config = require('./config.js'),
-      cors = require('cors')
+      cors = require('cors');
+      require('dotenv').config();
 
 const app = express();
+app.use(express.static('build'));
 
 app.use(bodyParser.json());
 app.use(cors())
@@ -18,13 +19,11 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(express.static('../app/src'));
-
 
 passport.use(new Auth0Strategy({
-   domain:       config.auth0.domain,
-   clientID:     config.auth0.clientID,
-   clientSecret: config.auth0.clientSecret,
+   domain:       process.env.DOMAIN,
+   clientID:     process.env.CLIENT_ID,
+   clientSecret: process.env.CLIENT_SECRET,
    callbackURL:  '/auth/callback'
   },
   function(accessToken, refreshToken, extraParams, profile, done) {
@@ -44,9 +43,7 @@ app.get('/auth', passport.authenticate('auth0'));
 
 
 app.get('/auth/callback',
-  passport.authenticate('auth0', {successRedirect: 'http://localhost:3006/'}), function(req, res) {
-    res.status(200).send(req.user);
-})
+  passport.authenticate('auth0', {successRedirect: 'http://localhost:3000/'}))
 
 app.get('/auth/me', function(req, res) {
   if (!req.user) return res.sendStatus(404);
@@ -55,7 +52,7 @@ app.get('/auth/me', function(req, res) {
 
 app.get('/auth/logout', function(req, res) {
   req.logout();
-  res.redirect('http://localhost:3006/');
+  res.redirect('http://localhost:3000/');
 })
 
 app.get('/getting', function(req, res) {
