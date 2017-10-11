@@ -27,23 +27,23 @@ passport.use(new Auth0Strategy({
    callbackURL:  '/auth/callback'
   },
   function(accessToken, refreshToken, extraParams, profile, done) {
+    // step three -- this function fires when authentication was successful.
         return done(null, profile);
     })
 );
 
-passport.serializeUser(function(user, done) {
+passport.serializeUser(function(user, done) { // step four -- this happens only once when authentication has been completed. It puts the user on the session object.
   done(null, user); 
 });
 
-passport.deserializeUser(function(user, done) {
+passport.deserializeUser(function(user, done) { // step five -- this happens everytime an endpoint is hit, it takes the user off the session object and puts it on req.user.
   done(null, user);
 });
 
-app.get('/auth', passport.authenticate('auth0'));
-
+app.get('/auth', passport.authenticate('auth0')); // step one -- the authenticate method uses the Auth0Strategy in the passport.use method and kicks it off to Auth0 for authentication
 
 app.get('/auth/callback',
-  passport.authenticate('auth0', {successRedirect: 'http://localhost:3000/'}))
+  passport.authenticate('auth0', {successRedirect: 'http://localhost:3000/'})) // step two -- it's returned from Auth0 and will once again run the authenticate method, since the user has been authenticated, it will skip the strategy being kicked off to Auth0 and will go to the callback function in the passport.use method
 
 app.get('/auth/me', function(req, res) {
   if (!req.user) return res.sendStatus(404);
