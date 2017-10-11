@@ -11,14 +11,15 @@ app.use(express.static('build'));
 
 app.use(bodyParser.json());
 app.use(cors())
-app.use(session({
+
+app.use(session({ // If a session store is not provided, it will use MemoryStore by default. this is not a viable option for production use as it is prone to memory leaks. It's good for developing and debugging only.
   resave: true, 
   saveUninitialized: true, 
   secret: 'alsdkjflkjsdfjksdf'
 }))
-app.use(passport.initialize());
-app.use(passport.session());
 
+app.use(passport.initialize()); // actual step one -- initializes passport, loads data from an exisiting session if one exists
+app.use(passport.session()); // actual step two -- is responsible for "authenticating" the session, by restoring the user information that was serialized during a previous login. What exactly that means, I do not know :) This MUST be after session() (above). It also calls the deserialize user method I think.
 
 passport.use(new Auth0Strategy({
    domain:       process.env.DOMAIN,
@@ -28,15 +29,19 @@ passport.use(new Auth0Strategy({
   },
   function(accessToken, refreshToken, extraParams, profile, done) {
     // step three -- this function fires when authentication was successful.
+    // Better practice would be to just pass on the user id and only store that in the session store to keep from using more unnecessary memory space. In the deserialize user method, you can make a database call to get that information that you may want for the user.
         return done(null, profile);
     })
 );
 
-passport.serializeUser(function(user, done) { // step four -- this happens only once when authentication has been completed. It puts the user on the session object.
+passport.serializeUser(function(user, done) { // step four -- this happens only once when authentication has been completed. It puts the user on the session and you can find it here - req.session.passport.user.
   done(null, user); 
 });
 
-passport.deserializeUser(function(user, done) { // step five -- this happens everytime an endpoint is hit, it takes the user off the session object and puts it on req.user.
+
+passport.deserializeUser(function(user, done) { // this happens everytime an endpoint is hit,it takes the req.user and allows you to add more stuff to it. 
+  // This is where you would make a DB call to get further information that would be added to req.user.
+  // Whatever you pass on in the done invocation will become req.user
   done(null, user);
 });
 
