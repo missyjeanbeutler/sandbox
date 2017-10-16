@@ -1,0 +1,40 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Willy Peto",
+      "age": 28,
+      "email": "wpeto0@ft.com",
+      "username": "w1",
+      "password": "w123",
+      "favorites": [
+        "ice cream",
+        "cake"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Ame Longega",
+      "age": 21,
+      "email": "alongega1@freewebs.com",
+      "username": "al123",
+      "password": "p1nk4dayz",
+      "favorites": [
+        "cookies",
+        "cupcakes"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Alica Piens",
+      "age": 34,
+      "email": "apiens2@springer.com",
+      "username": "allyboo",
+      "password": "newpassword1!",
+      "favorites": [
+        "love",
+        "sprinkles"
+      ]
+    }
+  ]
+}
