@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { getUsers } from '../../services/users.js';
-import { addUser } from '../../services/users.js';
+import { getUsers, addUser, deleteUser } from '../../services/users.js';
 import { Link } from 'react-router-dom';
 
 export default class Users extends Component {
@@ -10,6 +9,7 @@ export default class Users extends Component {
       users: []
     }
     this.add = this.add.bind(this);
+    this.delete = this.delete.bind(this)
   }
 
   add() {
@@ -23,7 +23,14 @@ export default class Users extends Component {
         })
       })
     })
-    
+  }
+
+  delete(id) {
+    deleteUser(id).then(res => {
+      this.setState({
+        users: res
+      })
+    })
   }
 
   componentDidMount() {
@@ -38,9 +45,12 @@ export default class Users extends Component {
 
     const users = this.state.users.map((e, i) => {
       return (
-        <Link to={`/users/${e.id}`} key={i}>
-          <p>{e.name}</p>
-        </Link>
+        <div key={i}>
+          <Link to={`/users/${e.id}`}>
+            <p>{e.name}</p>
+          </Link> 
+          <button onClick={() => this.delete(e.id)}>delete user</button>
+        </div>
       )
     })
 

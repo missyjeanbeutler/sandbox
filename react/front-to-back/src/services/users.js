@@ -17,3 +17,15 @@ export function addUser(user) {
     return res.data;
   })
 }
+
+export function updateUser(user, id) {
+  return axios.put('/api/updateUser/' + id, user).then(res => {
+    return res.data
+  })
+}
+
+export function deleteUser(id) {
+  return axios.delete('/api/deleteUser/' + id).then(res => {
+    return res.data
+  })
+}
