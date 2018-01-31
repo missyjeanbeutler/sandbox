@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+
+  <div id='basic_display'>
+    <h1>Basic data display:</h1>
+    <p>{{ message }}</p>
+  </div>  
+
+  <div id='iteration'>
+    <h1>Iteration:</h1>
+    <p v-for='num in numbers'>
+      {{ num }}
+    </p>
+  </div>
+
+  <div id='binding'>
+    <h1>Binding HTML attributes:</h1>
+    <p v-bind:style='style'>This text is blue!</p>
+  </div>
+
+  <div id='conditionals'>
+    <h1>Conditionals:</h1>
+    <p v-if='seen'>{{ message }}</p>
+  </div>
+
+  <div id='listening_events'>
+    <h1>Event Listeners:</h1>
+    <p>{{ show ? good : bad }}</p> 
+    <button v-on:click='switching'>Switch!</button>
+  </div>
+
+  <div id='two_way_binding'>
+    <h1>Two Way Binding:</h1>
+    <p>{{ message }}</p>
+    <input type="text" v-model='message' placeholder="type here">
+  </div>
+
+  <div id='using_components'>
+    <h1>Using Components:</h1>
+    <list 
+      v-for='l in theSecondList' 
+      v-bind:stuff='l.item' 
+      v-bind:key='l.id'>
+    </list>
+    <list 
+      v-for='l in theList' 
+      v-bind:stuff='l' 
+      v-bind:key='l'>
+    </list>
+  </div>
+
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script src='index.js'></script>
+</body>
+</html>
